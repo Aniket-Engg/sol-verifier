@@ -1,0 +1,33 @@
+{
+  "name": "sol-verifier",
+  "version": "1.0.0",
+  "description": "Verify Solidity contracts on etherscan",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aniket-Engg/sol-verifier.git"
+  },
+  "bin": {
+    "sol-verifier": "./bin/sol-verifier.js"
+  },
+  "keywords": [
+    "etherscan",
+    "solidity"
+  ],
+  "author": "Aniket",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Aniket-Engg/sol-verifier/issues"
+  },
+  "homepage": "https://github.com/Aniket-Engg/sol-verifier#readme",
+  "dependencies": {
+    "cli-color": "^1.4.0",
+    "commander": "^2.19.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2",
+    "solparse": "^2.2.5"
+  }
+}
