@@ -10,6 +10,7 @@ program
   .option('-c, --contract <path-to-solidity-contract-file>', 'Add Contract File Path (required)')
   .option('-a, --address <contract-address>', 'Add Address of Deployed Contract (required)')
   .option('-n, --network <network>', 'Add Ethereum Network on Which Contract is deployed (required)')
+  .option('-p, --constructParams [param1, param2,...]', 'Add Constructor parameter values same as in deployment (id applicable)')
   .option('-o, --optimize', 'Add This Flag to Optimize The Contract (optional)')
   .parse(process.argv);
 
@@ -19,7 +20,7 @@ if(!program.key || !program.contract || !program.address || !program.network)
     program.outputHelp();
 }
 else{
-    verify(program.key, program.contract, program.address, program.network, program.optimize)
+    verify(program.key, program.contract, program.address, program.network, program.constructParams, program.optimize)
     .then(function(res){
         if(res.status == '1'){
             console.log(clc.green('Contract has been successfully verified. Your GUID receipt : ' + res.result));
