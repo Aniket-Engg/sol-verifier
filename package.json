@@ -1,7 +1,7 @@
 {
   "name": "sol-verifier",
-  "version": "1.0.3",
-  "description": "Verify Solidity contracts on etherscan",
+  "version": "1.1.0",
+  "description": "Verify Solidity Contracts on Etherscan",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,7 +20,7 @@
     "ethereum",
     "smart-contract"
   ],
-  "author": "Aniket",
+  "author": "Aniket-Engg",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Aniket-Engg/sol-verifier/issues"
