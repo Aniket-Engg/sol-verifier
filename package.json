@@ -1,6 +1,6 @@
 {
   "name": "sol-verifier",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Verify Solidity contracts on etherscan",
   "main": "index.js",
   "scripts": {
@@ -15,7 +15,10 @@
   },
   "keywords": [
     "etherscan",
-    "solidity"
+    "solidity",
+    "verifier",
+    "ethereum",
+    "smart-contract"
   ],
   "author": "Aniket",
   "license": "MIT",

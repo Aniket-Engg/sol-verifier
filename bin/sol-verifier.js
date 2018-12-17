@@ -20,8 +20,20 @@ if(!program.key || !program.contract || !program.address || !program.network)
     console.log(clc.red("Error: Required parameter not passed"));
     program.outputHelp();
 }
-else{
-    verify(program.key, program.contract, program.address, program.network, program.contractName, program.constructParams, program.optimize)
+else{ 
+    if(program.constructParams)
+        program.constructParams = program.constructParams.slice(1, (program.constructParams.length -1)).split(',');
+
+    let data = {
+        key             :   program.key,
+        path            :   program.contract,
+        contractAddress :   program.address,
+        network         :   program.network,
+        contractName    :   program.contractName,
+        cvalues         :   program.constructParams,
+        optimizationFlag:   program.optimize
+    };
+    verify(data )
     .then(function(res){
         if(res.status == '1'){
             console.log(clc.green('Contract has been successfully verified. Your GUID receipt : ' + res.result));
@@ -34,6 +46,7 @@ else{
         console.log(clc.red('Error: ' + error.message));
     });
 }
+
 
 
  

@@ -3,17 +3,28 @@ Verifying a contract on etherscan make your contract global and eligible for rea
 
 ## Prerequisites
 Make sure you have:
-* [node.js](https://nodejs.org/en/) installed on your system
+* [Node.js](https://nodejs.org/en/) installed on your system
 * Etherscan Ethereum Developer [API](https://etherscan.io/apis) key-token.
 * Address on which contract is deployed on the network
 * Constructor parameters values (if applicable)
 
 ## Install
+As a dependency, to use inside the code:
+```
+npm install --save sol-verifier
+```
+As a development dependency, to use it as `<project_root>/node_modules/.bin/solidity-docgen`
+```
+npm install --save-dev sol-verifier
+```
+As a global npm module, to use `sol-verifier` as an executable
 ```
 npm install -g sol-verifier
 ```
 
 ## Run
+
+### As CLI
 Sol-verifier has multiple available options some of them are required and some depends on the usecase. One can see all the available options by using `--help` option.
 ```
 $ sol-verifier --help
@@ -38,9 +49,39 @@ You can add flag `-o` to enable the optimization of contract. On successful veri
 ```
 Contract has been successfully verified. Your GUID receipt : zkelnp3uxnr4qg3tcxsbdt8jnbdl96jevcb268c5uru4nhmgqn
 ```
-You will get a different GUID (from above response) everytime. This GUID receipt can be used to track the status of verification in the bottom section [here](https://etherscan.io/sourcecode-demo.html). (Choose the right URL according to the used network)
-This does not work on imported files. You can use the available npm packages to merge the files in one.
 
+### By requiring in Node.js file
+Require the module after installation.
+```
+const verifier = require('sol-verifier');
+```
+Now create the request object to pass as: (Make sure keys of request object will be always same.)
+```
+    var data = {
+        key: 'FK6N4FZ33KAGQJYPQJQ8JUS6JH9ZNBFJ4N',  // Etherscan API key (required)
+        path : '/path/to/contract/file/sample.sol', // Contract file path(required)
+        contractAddress:  '0xec22710b71d8437a4915fba32dd95c02ad62ef19',     // Contract address (required)
+        network  : 'ropsten',   // Ethereum network used (required)
+        contractName: 'Sample'  // Contract name, applicable only if contract file has more than one contracts
+        cvalues   : cArray,     // constructor value in array, applicable if contract has constructor
+        optimizationFlag: false // Depends how you have compiled your contract (Default: false)
+    };
+
+    verifier.verifyContract(data1).then(function(res){
+        console.log(res);
+    })
+    .catch(function(error){
+        console.log('Error: ' + error.message);
+    });
+```
+Parameters not applicable in your usecase can be ignored. Success response will look like:
+```
+{ status: '1',
+  message: 'OK',
+  result: 'zkelnp3uxnr4qg3tcxsbdt8jnbdl96jevcb268c5uru4nhmgqn' }
+```
+You will get a different GUID (from above response) everytime. This GUID receipt can be used to track the status of verification in the bottom section [here](https://etherscan.io/sourcecode-demo.html). (Choose the right URL according to the used network)
+**Note:** Getting GUID back doesn't ensure the contract verification, unless it show `>> Pass - Verified` in the status while checking at above given link.
 ## Limitations
 
 * This doesn't provide support for libraries.
