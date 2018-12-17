@@ -11,7 +11,7 @@ program
   .option('-a, --address <contract-address>', 'Add Address of Deployed Contract (required)')
   .option('-n, --network <network>', 'Add Ethereum Network on Which Contract is deployed (required)')
   .option('-N, --contractName <contract-name>', 'Add Contract Name if Passed File Contains More Than One Contract (if applicable)')
-  .option('-p, --constructParams [param1, param2,...]', 'Add Constructor parameter values same as in deployment (if applicable)')
+  .option('-p, --constructParams [param1, param2,...]', 'Add Constructor Parameter Values Same as in Deployment (if applicable)')
   .option('-o, --optimize', 'Add This Flag to Optimize The Contract (optional)')
   .parse(process.argv);
   
