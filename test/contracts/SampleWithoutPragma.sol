@@ -1,6 +1,5 @@
-pragma solidity ^0.5.0;
 
-contract Simple {
+contract Sample {
     uint public  n;
     
     function set(uint _n) public returns (uint) {
