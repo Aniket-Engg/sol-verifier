@@ -19,7 +19,7 @@ describe('sol-verifier', () => {
                 contractName = 'Sample';
                 network = 'rinkeby';
                 contractAddress = await deployContract(contractName, network);
-                await sleep(21000); // To make sure that contractCode is stored
+                await sleep(30000); // To make sure that contractCode is stored
             }catch(err){
                 throw err;
             }
@@ -36,7 +36,7 @@ describe('sol-verifier', () => {
         });
 
         it('Trying to verify already verified contract (should fail)', async () => {
-            await sleep(15000); // To make sure that etherscan gets sufficient time to verify the contract above
+            await sleep(20000); // To make sure that etherscan gets sufficient time to verify the contract above
             let response = await Verifier.verifyContract(sampleData);
             response.status.should.equal('0');
             response.result.should.equal('Contract source code already verified');
@@ -103,7 +103,7 @@ describe('sol-verifier', () => {
                 network = 'rinkeby';
                 constructParams.push(50);
                 contractAddress = await deployContract(contractName, network, constructParams);
-                await sleep(21000); // To make sure that contractCode is stored
+                await sleep(30000); // To make sure that contractCode is stored
             }catch(err){
                 throw err;
             }
@@ -143,7 +143,7 @@ describe('sol-verifier', () => {
                 network = 'rinkeby';
                 constructParams.push(40);
                 contractAddress = await deployContract(contractName, network, constructParams);
-                await sleep(21000); // To make sure that contractCode is stored
+                await sleep(30000); // To make sure that contractCode is stored
             }catch(err){
                 throw err;
             }

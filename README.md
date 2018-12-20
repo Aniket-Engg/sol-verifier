@@ -1,3 +1,5 @@
+[![Build status](https://travis-ci.com/Aniket-Engg/sol-verifier.svg?branch=master)](https://travis-ci.com/Aniket-Engg/sol-verifier)
+
 # sol-verifier
 Verifying a contract on etherscan make your contract global and eligible for reading and writing on Etherscan. sol-verifier is an npm package which can be used to verify the ethereum contracts on Etherscan. It internally uses the Etherscan API.
 
