@@ -1,12 +1,11 @@
 const Web3 = require('web3');
 const HDWalletProvider = require("truffle-hdwallet-provider");
 const solc = require('./solc');
-const config = require('./config.json');
 
 
 module.exports.deployContract = async (contractName, network, initParams = [] ) => {
     var net = 'https://' + network +'.infura.io/';
-    var web3 = new Web3(new HDWalletProvider(config.seeds, net));
+    var web3 = new Web3(new HDWalletProvider(process.env.SEED, net));
     let contractPath = __dirname + "/../contracts/"+ contractName + ".sol";
     try{
         let {bytecode, abi } = await solc.compile(contractPath, contractName);
@@ -16,7 +15,7 @@ module.exports.deployContract = async (contractName, network, initParams = [] ) 
             arguments: initParams
         })
         .send({
-            from: config.address,
+            from: process.env.ADDRESS,
         });
         return result.options.address;
     }catch(err){

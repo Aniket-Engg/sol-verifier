@@ -1,7 +1,6 @@
 'use strict';
 const Verifier = require('../index')
 const { deployContract } = require('./utils/deploy');
-const config = require('./utils/config.json');
 require('chai').should();
 
 function sleep(ms) {
@@ -19,16 +18,15 @@ describe('sol-verifier', () => {
             try{
                 contractName = 'Sample';
                 network = 'rinkeby';
-                //contractAddress = '0x7be137B7743422bd88D500c71bf82c883E0195Fd';
                 contractAddress = await deployContract(contractName, network);
-                await sleep(20000); // To make sure that contractCode is stored
+                await sleep(21000); // To make sure that contractCode is stored
             }catch(err){
                 throw err;
             }
         })
         it('Verifies Sample.sol contract successfully', async () => {
             sampleData = {
-                key: config.key,
+                key: process.env.KEY,
                 path : __dirname + '/contracts/'+ contractName +'.sol', 
                 contractAddress:  contractAddress,
                 network  : network 
@@ -57,7 +55,7 @@ describe('sol-verifier', () => {
 
         it('Trying to verify contract by passing non-existing Ethereum network (should fail)', async () => {
             var temp = {
-                key: config.key,
+                key: process.env.KEY,
                 path : __dirname + '/contracts/'+ contractName +'.sol', 
                 contractAddress:  contractAddress,
                 network  : "random"
@@ -71,7 +69,7 @@ describe('sol-verifier', () => {
 
         it('Trying to pass a contract without pragma statement (should fail)', async () => {
             var temp = {
-                key: config.key,
+                key: process.env.KEY,
                 path : __dirname + '/contracts/'+ 'SampleWithoutPragma' +'.sol', 
                 contractAddress:  contractAddress,
                 network  : "rinkeby"
@@ -104,9 +102,8 @@ describe('sol-verifier', () => {
                 contractName = 'SampleWithConstructor';
                 network = 'rinkeby';
                 constructParams.push(50);
-                //contractAddress = '0x90499Dd3113e2786d6f6be173b1E889719D05ad7';
                 contractAddress = await deployContract(contractName, network, constructParams);
-                await sleep(20000); // To make sure that contractCode is stored
+                await sleep(21000); // To make sure that contractCode is stored
             }catch(err){
                 throw err;
             }
@@ -114,7 +111,7 @@ describe('sol-verifier', () => {
 
         it('Verifies SampleWithConstructor.sol contract successfully', async () => {
             sampleData = {
-                key     : config.key,
+                key     : process.env.KEY,
                 path    : __dirname + '/contracts/'+ contractName +'.sol', 
                 contractAddress:  contractAddress,
                 network : network,
@@ -145,9 +142,8 @@ describe('sol-verifier', () => {
                 contractName = 'MultiContractSample';
                 network = 'rinkeby';
                 constructParams.push(40);
-                //contractAddress = '0x6584614704674E9ad53D143A0C86c47e29807852';
                 contractAddress = await deployContract(contractName, network, constructParams);
-                await sleep(20000); // To make sure that contractCode is stored
+                await sleep(21000); // To make sure that contractCode is stored
             }catch(err){
                 throw err;
             }
@@ -155,7 +151,7 @@ describe('sol-verifier', () => {
 
         it('Verifies MultiContractSample.sol contract successfully', async () => {
             sampleData = {
-                key     : config.key,
+                key     : process.env.KEY,
                 path    : __dirname + '/contracts/'+ contractName +'.sol', 
                 contractAddress:  contractAddress,
                 network : network,
