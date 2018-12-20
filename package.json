@@ -4,7 +4,7 @@
   "description": "Verify Solidity Contracts on Etherscan",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha --timeout 400000 ",
+    "test": "nyc mocha --timeout 400000 --exit",
     "coverage": "nyc report"
   },
   "repository": {
