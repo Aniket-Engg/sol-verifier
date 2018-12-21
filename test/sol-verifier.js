@@ -89,6 +89,33 @@ describe('sol-verifier', () => {
         });
     });
 
+    describe('Compiling & Verifying Sample.sol by enabling optimization', () => {
+        var contractAddress;
+        var contractName;
+        var network;
+        var sampleData;
+        before('Compile & Deploy Sample.sol', async () => {
+            try{
+                contractName = 'Sample';
+                network = 'rinkeby';
+                contractAddress = await deployContract(contractName, network, [], true); // Optimization Enabled
+                await sleep(30000); // To make sure that contractCode is stored
+            }catch(err){
+                throw err;
+            }
+        })
+        it('Verifies Sample.sol contract successfully by enabling optimization', async () => {
+            sampleData = {
+                key: process.env.KEY,
+                path : __dirname + '/contracts/'+ contractName +'.sol', 
+                contractAddress:  contractAddress,
+                network  : network,
+                optimizationFlag: true  // Optimization Enabled
+            }; 
+            let response = await Verifier.verifyContract(sampleData);
+            response.status.should.equal('1');
+        });
+    });
 
 
     describe('Deploying & Verifying SampleWithConstructor.sol', () => {
@@ -105,6 +132,7 @@ describe('sol-verifier', () => {
                 contractAddress = await deployContract(contractName, network, constructParams);
                 await sleep(30000); // To make sure that contractCode is stored
             }catch(err){
+                console.log(err);
                 throw err;
             }
         })
@@ -121,7 +149,7 @@ describe('sol-verifier', () => {
             response.status.should.equal('1');
         });
 
-        it('Trying to verify SampleWithConstructor contract with passing constructor values (should fail)', async () => {
+        it('Trying to verify SampleWithConstructor contract without passing constructor values (should fail)', async () => {
             sampleData.cvalues = null;
             try{
                 await Verifier.verifyContract(sampleData);
