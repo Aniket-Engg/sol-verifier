@@ -77,6 +77,20 @@ describe('sol-verifier', () => {
             try{
                 await Verifier.verifyContract(temp);
             }catch(err){
+               err.message.should.equal('No Pragma specified !!!');
+            }
+        });
+
+        it('Trying to pass a contract with non-existing pragma statement (should fail)', async () => {
+            var temp = {
+                key: process.env.KEY,
+                path : __dirname + '/contracts/'+ 'sampleWithNonExistingPragma' +'.sol', 
+                contractAddress:  contractAddress,
+                network  : "rinkeby"
+            };
+            try{
+                await Verifier.verifyContract(temp);
+            }catch(err){
                err.message.should.equal('Unsupported Compiler Version/No Pragma');
             }
         });
@@ -132,7 +146,6 @@ describe('sol-verifier', () => {
                 contractAddress = await deployContract(contractName, network, constructParams);
                 await sleep(30000); // To make sure that contractCode is stored
             }catch(err){
-                console.log(err);
                 throw err;
             }
         })
@@ -197,6 +210,33 @@ describe('sol-verifier', () => {
             }catch(err){
                 err.message.should.equal('More Than One Contracts in File, Pass the Contract Name');
             }
+        });
+    });
+
+    describe('Deploying & Verifying sampleWithUpdatedPragma.sol', () => {
+        var contractAddress;
+        var contractName = 'sampleWithUpdatedPragma';
+        var network;
+        var constructParams = [];
+        before('Deploy sampleWithUpdatedPragma', async () => {
+            try{
+                network = 'rinkeby';
+                contractAddress = await deployContract(contractName, network,constructParams);
+                await sleep(30000); // To make sure that contractCode is stored
+            }catch(err){
+                throw err;
+            }
+        })
+
+        it('Verifies sampleWithUpdatedPragma contract successfully', async () => {
+            var temp = {
+                key: process.env.KEY,
+                path : __dirname + '/contracts/'+ 'sampleWithUpdatedPragma' +'.sol', 
+                network  : "rinkeby",
+                contractAddress:  contractAddress,
+            };
+            let response = await Verifier.verifyContract(temp);
+            response.status.should.equal('1');    
         });
     });
 });
