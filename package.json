@@ -35,7 +35,7 @@
     "solc": "^0.5.1",
     "solparse": "^2.2.5",
     "truffle-hdwallet-provider": "0.0.6",
-    "web3": "^1.0.0-beta.37"
+    "web3": "1.0.0-beta.37"
   },
   "devDependencies": {
     "chai": "^4.2.0",
