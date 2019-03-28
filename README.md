@@ -1,7 +1,7 @@
 [![npm version](https://badge.fury.io/js/sol-verifier.svg)](https://www.npmjs.com/package/sol-verifier)
 [![Build status](https://travis-ci.com/Aniket-Engg/sol-verifier.svg?branch=master)](https://travis-ci.com/Aniket-Engg/sol-verifier)
 [![Coverage Status](https://coveralls.io/repos/github/Aniket-Engg/sol-verifier/badge.svg?branch=master)](https://coveralls.io/github/Aniket-Engg/sol-verifier?branch=master)
-[![npm](https://img.shields.io/npm/dt/sol-verifier.svg)](https://www.npmjs.com/package/sol-profiler)
+[![npm](https://img.shields.io/npm/dt/sol-verifier.svg)](https://www.npmjs.com/package/sol-verifier)
 
 # sol-verifier
 Verifying a contract on etherscan make your contract global and eligible for reading and writing on Etherscan. sol-verifier is an npm package which can be used to verify the ethereum contracts on Etherscan. It internally uses the Etherscan API.
