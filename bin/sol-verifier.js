@@ -21,27 +21,27 @@ if(!program.key || !program.contract || !program.address || !program.network)
   console.log(clc.red('Error: Required parameter not passed'));
   program.outputHelp();
 }
-else{ 
-    if(program.constructParams)
-        program.constructParams = program.constructParams.slice(1, (program.constructParams.length -1)).split(',');
+else{
+  if(program.constructParams)
+    program.constructParams = program.constructParams.slice(1, (program.constructParams.length -1)).split(',');
 
-    let data = {
-        key             :   program.key,
-        path            :   program.contract,
-        contractAddress :   program.address,
-        network         :   program.network,
-        contractName    :   program.contractName,
-        cvalues         :   program.constructParams,
-        optimizationFlag:   program.optimize
-    };
-    verify(data)
-    .then(function(res){
-        if(res.status == '1'){
-            console.log(clc.green('Contract has been successfully verified. Your GUID receipt : ' + res.result));
-        }
-        else if(res.status == '0'){
-            console.log(clc.red('Error: ' + res.result));
-        }
+  const data = {
+    key             :   program.key,
+    path            :   program.contract,
+    contractAddress :   program.address,
+    network         :   program.network,
+    contractName    :   program.contractName,
+    cvalues         :   program.constructParams,
+    optimizationFlag:   program.optimize,
+  };
+  verify(data)
+    .then(function (res){
+      if(res.status == '1'){
+        console.log(clc.green('Contract has been successfully verified. Your GUID receipt : ' + res.result));
+      }
+      else if(res.status == '0'){
+        console.log(clc.red('Error: ' + res.result));
+      }
     })
     .catch(function (error){
       console.log(clc.red('Error: ' + error.message));
