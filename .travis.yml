@@ -16,6 +16,6 @@ jobs:
       name: "Unit tests"
       script: npm run test
     
-    - stage: coverage
+    - stage: tests
       name: "Unit tests coverage report"
       script: npm run coverage
