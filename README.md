@@ -91,7 +91,7 @@ You will get a different GUID (from above response) everytime. This GUID receipt
 ## Limitations
 
 * This doesn't provide support for libraries.
-* Works for solidity version `0.4.11` to `0.5.7`.
+* Works for solidity version `>0.4.11`.
 * Doesn't support `import` statements in contract file. Use available packages to flatten the contract.
 * The Etherscan API that this module uses is in BETA state.
 
