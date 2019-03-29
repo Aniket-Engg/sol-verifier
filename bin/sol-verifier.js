@@ -1,52 +1,53 @@
 #!/usr/bin/env node
 
-const clc       = require("cli-color");
-var program     = require('commander');
+'use strict';
+const clc       = require('cli-color');
+const program     = require('commander');
 const { verify } = require('../lib/verify');
 
 program
-  .version(require("../package.json").version, '-v, --version')
+  .version(require('../package.json').version, '-v, --version')
   .option('-k, --key <etherscan-api-key>', 'Add Etherscan API Key (required)')
   .option('-c, --contract <path-to-solidity-contract-file>', 'Add Contract File Path (required)')
   .option('-a, --address <contract-address>', 'Add Address of Deployed Contract (required)')
   .option('-n, --network <network>', 'Add Ethereum Network on Which Contract is deployed (required)')
-  .option('-N, --contractName <contract-name>', 'Add Contract Name if Passed File Contains More Than One Contract (if applicable)')
-  .option('-p, --constructParams [param1, param2,...]', 'Add Constructor Parameter Values Same as in Deployment (if applicable)')
+  .option('-N, --contractName <contract-name>', 'Add Contract Name if Passed File Contains More Than One Contract (if applicable)') // eslint-disable-line max-len
+  .option('-p, --constructParams [param1, param2,...]', 'Add Constructor Parameter Values Same as in Deployment (if applicable)') // eslint-disable-line max-len
   .option('-o, --optimize', 'Add This Flag to Optimize The Contract (optional)')
   .parse(process.argv);
-  
+
 if(!program.key || !program.contract || !program.address || !program.network)
 {
-    console.log(clc.red("Error: Required parameter not passed"));
-    program.outputHelp();
+  console.log(clc.red('Error: Required parameter not passed'));
+  program.outputHelp();
 }
-else{ 
-    if(program.constructParams)
-        program.constructParams = program.constructParams.slice(1, (program.constructParams.length -1)).split(',');
+else{
+  if(program.constructParams)
+    program.constructParams = program.constructParams.slice(1, (program.constructParams.length -1)).split(',');
 
-    let data = {
-        key             :   program.key,
-        path            :   program.contract,
-        contractAddress :   program.address,
-        network         :   program.network,
-        contractName    :   program.contractName,
-        cvalues         :   program.constructParams,
-        optimizationFlag:   program.optimize
-    };
-    verify(data )
-    .then(function(res){
-        if(res.status == '1'){
-            console.log(clc.green('Contract has been successfully verified. Your GUID receipt : ' + res.result));
-        }
-        else if(res.status == '0'){
-            console.log(clc.red('Error: ' + res.result));
-        }
+  const data = {
+    key             :   program.key,
+    path            :   program.contract,
+    contractAddress :   program.address,
+    network         :   program.network,
+    contractName    :   program.contractName,
+    cvalues         :   program.constructParams,
+    optimizationFlag:   program.optimize,
+  };
+  verify(data )
+    .then(function (res){
+      if(res.status == '1'){
+        console.log(clc.green('Contract has been successfully verified. Your GUID receipt : ' + res.result));
+      }
+      else if(res.status == '0'){
+        console.log(clc.red('Error: ' + res.result));
+      }
     })
-    .catch(function(error){
-        console.log(clc.red('Error: ' + error.message));
+    .catch(function (error){
+      console.log(clc.red('Error: ' + error.message));
     });
 }
 
 
 
- 
+
