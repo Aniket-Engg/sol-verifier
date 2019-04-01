@@ -4,7 +4,9 @@
   "description": "Verify Solidity Contracts on Etherscan",
   "main": "index.js",
   "scripts": {
-    "test": "nyc mocha --timeout 400000 --exit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "nyc mocha --timeout 600000 --exit",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
@@ -32,7 +34,7 @@
     "commander": "^2.19.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "solc": "^0.5.1",
+    "solc": "^0.5.7",
     "solparse": "^2.2.5",
     "truffle-hdwallet-provider": "0.0.6",
     "web3": "1.0.0-beta.37"
@@ -40,6 +42,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "coveralls": "^3.0.2",
+    "eslint": "^5.15.3",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0"
   }
