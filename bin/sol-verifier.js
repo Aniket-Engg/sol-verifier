@@ -34,7 +34,7 @@ else{
     cvalues         :   program.constructParams,
     optimizationFlag:   program.optimize,
   };
-  verify(data )
+  verify(data)
     .then(function (res){
       if(res.status == '1'){
         console.log(clc.green('Contract has been successfully verified. Your GUID receipt : ' + res.result));
