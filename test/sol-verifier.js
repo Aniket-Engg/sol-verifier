@@ -1,6 +1,10 @@
 'use strict';
 const Verifier = require('../index');
 const { deployContract } = require('./utils/deploy');
+const solReleases = require('../lib/solReleases');
+const mockMap = require('./utils/mock_mapping.json');
+const fs = require('fs');
+const parser = require('solparse');
 require('chai').should();
 
 function sleep (ms) {
@@ -14,12 +18,17 @@ describe('sol-verifier', () => {
     let contractName;
     let network;
     let sampleData;
+    let path;
     before('Deploy Sample.sol', async () => {
       try{
         contractName = 'Sample';
-        network = 'rinkeby';
-        contractAddress = await deployContract(contractName, network);
-        await sleep(30000); // To make sure that contractCode is stored
+        network = 'ropsten';
+        path = __dirname + '/contracts/'+ contractName +'.sol';
+        const contractSource = fs.readFileSync(path, 'UTF-8');
+        const parsedData = parser.parse(contractSource).body;
+        const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
+        contractAddress = await deployContract(contractName, network, compiler);
+        await sleep(50000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
       }
@@ -27,7 +36,7 @@ describe('sol-verifier', () => {
     it('Verifies Sample.sol contract successfully', async () => {
       sampleData = {
         key: process.env.KEY,
-        path : __dirname + '/contracts/'+ contractName +'.sol',
+        path : path,
         contractAddress:  contractAddress,
         network  : network,
       };
@@ -46,7 +55,7 @@ describe('sol-verifier', () => {
     it('Trying to verify contract without passing Etherscan API key (should fail)', async () => {
       const temp = {
         key: '',
-        path : __dirname + '/contracts/'+ contractName +'.sol',
+        path : path,
         contractAddress:  contractAddress,
         network  : network };
       const response = await Verifier.verifyContract(temp);
@@ -57,7 +66,7 @@ describe('sol-verifier', () => {
     it('Trying to verify contract by passing non-existing Ethereum network (should fail)', async () => {
       const temp = {
         key: process.env.KEY,
-        path : __dirname + '/contracts/'+ contractName +'.sol',
+        path : path,
         contractAddress:  contractAddress,
         network  : 'random',
       };
@@ -81,11 +90,16 @@ describe('sol-verifier', () => {
     let contractName;
     let network;
     let sampleData;
+    let path;
     before('Compile & Deploy Sample.sol', async () => {
       try{
         contractName = 'Sample';
-        network = 'rinkeby';
-        contractAddress = await deployContract(contractName, network, [], true); // Optimization Enabled
+        network = 'ropsten';
+        path = __dirname + '/contracts/'+ contractName +'.sol';
+        const contractSource = fs.readFileSync(path, 'UTF-8');
+        const parsedData = parser.parse(contractSource).body;
+        const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
+        contractAddress = await deployContract(contractName, network, compiler, [], true);
         await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
@@ -94,7 +108,7 @@ describe('sol-verifier', () => {
     it('Verifies Sample.sol contract successfully by enabling optimization', async () => {
       sampleData = {
         key: process.env.KEY,
-        path : __dirname + '/contracts/'+ contractName +'.sol',
+        path : path,
         contractAddress:  contractAddress,
         network  : network,
         optimizationFlag: true,  // Optimization Enabled
@@ -111,12 +125,17 @@ describe('sol-verifier', () => {
     let network;
     let sampleData;
     const constructParams = [];
+    let path;
     before('Deploy SampleWithConstructor.sol', async () => {
       try{
         contractName = 'SampleWithConstructor';
-        network = 'rinkeby';
+        network = 'ropsten';
         constructParams.push(50);
-        contractAddress = await deployContract(contractName, network, constructParams);
+        path = __dirname + '/contracts/'+ contractName +'.sol';
+        const contractSource = fs.readFileSync(path, 'UTF-8');
+        const parsedData = parser.parse(contractSource).body;
+        const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
+        contractAddress = await deployContract(contractName, network, compiler, constructParams);
         await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
@@ -126,7 +145,7 @@ describe('sol-verifier', () => {
     it('Verifies SampleWithConstructor.sol contract successfully', async () => {
       sampleData = {
         key     : process.env.KEY,
-        path    : __dirname + '/contracts/'+ contractName +'.sol',
+        path    : path,
         contractAddress:  contractAddress,
         network : network,
         cvalues : constructParams,
@@ -151,12 +170,17 @@ describe('sol-verifier', () => {
     let network;
     let sampleData;
     const constructParams = [];
+    let path;
     before('Deploy MultiContractSample.sol', async () => {
       try{
         contractName = 'MultiContractSample';
-        network = 'rinkeby';
+        network = 'ropsten';
         constructParams.push(40);
-        contractAddress = await deployContract(contractName, network, constructParams);
+        path = __dirname + '/contracts/'+ contractName +'.sol';
+        const contractSource = fs.readFileSync(path, 'UTF-8');
+        const parsedData = parser.parse(contractSource).body;
+        const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
+        contractAddress = await deployContract(contractName, network, compiler, constructParams);
         await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
@@ -166,7 +190,7 @@ describe('sol-verifier', () => {
     it('Verifies MultiContractSample.sol contract successfully', async () => {
       sampleData = {
         key     : process.env.KEY,
-        path    : __dirname + '/contracts/'+ contractName +'.sol',
+        path    : path,
         contractAddress:  contractAddress,
         network : network,
         cvalues : constructParams,
@@ -183,33 +207,6 @@ describe('sol-verifier', () => {
       }catch(err){
         err.message.should.equal('More Than One Contracts in File, Pass the Contract Name');
       }
-    });
-  });
-
-  describe('Deploying & Verifying sampleWithUpdatedPragma.sol', () => {
-    let contractAddress;
-    const contractName = 'sampleWithUpdatedPragma';
-    let network;
-    const constructParams = [];
-    before('Deploy sampleWithUpdatedPragma', async () => {
-      try{
-        network = 'rinkeby';
-        contractAddress = await deployContract(contractName, network, constructParams);
-        await sleep(30000); // To make sure that contractCode is stored
-      }catch(err){
-        throw err;
-      }
-    });
-
-    it('Verifies sampleWithUpdatedPragma contract successfully', async () => {
-      const temp = {
-        key: process.env.KEY,
-        path : __dirname + '/contracts/'+ contractName +'.sol',
-        network  : 'rinkeby',
-        contractAddress:  contractAddress,
-      };
-      const response = await Verifier.verifyContract(temp);
-      response.status.should.equal('1');
     });
   });
 });
