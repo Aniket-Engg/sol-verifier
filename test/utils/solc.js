@@ -2,8 +2,9 @@
 
 const solc = require('solc');
 const fs = require('fs');
+const util = require('util');
 
-module.exports.compile = async (contractPath, contractName, enableOptimization) => {
+module.exports.compile = async (contractPath, contractName, enableOptimization, compiler) => {
   const input = {
     language: 'Solidity',
     sources: {
@@ -22,7 +23,9 @@ module.exports.compile = async (contractPath, contractName, enableOptimization) 
 
   if(enableOptimization)
     input.settings.optimizer = { enabled: true };
-  const compilationData = JSON.parse(solc.compile(JSON.stringify(input))).contracts['sample.sol'][contractName];
+  const loadRemoteVersion = util.promisify(solc.loadRemoteVersion);
+  const remoteSolc = await loadRemoteVersion(compiler);
+  const compilationData = JSON.parse(remoteSolc.compile(JSON.stringify(input))).contracts['sample.sol'][contractName];
   const result = {};
   result.bytecode = compilationData.evm.bytecode.object;
   result.abi = compilationData.abi;
