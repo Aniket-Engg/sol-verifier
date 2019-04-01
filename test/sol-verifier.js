@@ -28,7 +28,7 @@ describe('sol-verifier', () => {
         const parsedData = parser.parse(contractSource).body;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
         contractAddress = await deployContract(contractName, network, compiler);
-        await sleep(50000); // To make sure that contractCode is stored
+        await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
       }
@@ -41,11 +41,12 @@ describe('sol-verifier', () => {
         network  : network,
       };
       const response = await Verifier.verifyContract(sampleData);
+      await sleep(30000);
       response.status.should.equal('1');
     });
 
     it('Trying to verify already verified contract (should fail)', async () => {
-      await sleep(20000); // To make sure that etherscan gets sufficient time to verify the contract above
+      await sleep(30000); // To make sure that etherscan gets sufficient time to verify the contract above
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('0');
       response.result.should.equal('Contract source code already verified');
@@ -73,20 +74,6 @@ describe('sol-verifier', () => {
         await Verifier.verifyContract(temp);
       }catch(err){
         err.message.should.equal('Invalid Network Passed');
-      }
-    });
-
-    it('Trying to pass a contract without pragma statement (should fail)', async () => {
-      const temp = {
-        key: process.env.KEY,
-        path : __dirname + '/contracts/'+ 'SampleWithoutPragma' +'.sol',
-        contractAddress:  contractAddress,
-        network  : 'rinkeby',
-      };
-      try{
-        await Verifier.verifyContract(temp);
-      }catch(err){
-        err.message.should.equal('Unsupported Compiler Version/No Pragma');
       }
     });
 
@@ -151,7 +138,6 @@ describe('sol-verifier', () => {
         contractAddress = await deployContract(contractName, network, compiler, constructParams);
         await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
-        console.log(err);
         throw err;
       }
     });
