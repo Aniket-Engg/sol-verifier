@@ -28,9 +28,7 @@ describe('sol-verifier', () => {
         const contractSource = fs.readFileSync(path, 'UTF-8');
         const parsedData = parser.parse(contractSource).body;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
-        console.log(compiler);
         contractAddress = await deployContract(contractName, network, compiler);
-        console.log(contractAddress);
         await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
