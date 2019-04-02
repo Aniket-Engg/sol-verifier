@@ -14,6 +14,6 @@ jobs:
 
     - stage: tests
       name: "Unit tests"
-      script: npm run test && npm run coverage
+      script: cd test && npm install && cd .. && npm run test && npm run coverage
     
 
