@@ -1,10 +1,11 @@
 'use strict';
+const fs = require('fs');
+const parser = require('solparse');
 const Verifier = require('../index');
 const { deployContract } = require('./utils/deploy');
 const solReleases = require('../lib/solReleases');
 const mockMap = require('./utils/mock_mapping.json');
-const fs = require('fs');
-const parser = require('solparse');
+const { getPragma, processFile } =  require('./utils/import');
 require('chai').should();
 
 function sleep (ms) {
@@ -99,7 +100,7 @@ describe('sol-verifier', () => {
         const contractSource = fs.readFileSync(path, 'UTF-8');
         const parsedData = parser.parse(contractSource).body;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
-        contractAddress = await deployContract(contractName, network, compiler, [], true);
+        contractAddress = await deployContract(contractName, network, compiler, null, [], true);
         await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
@@ -135,7 +136,7 @@ describe('sol-verifier', () => {
         const contractSource = fs.readFileSync(path, 'UTF-8');
         const parsedData = parser.parse(contractSource).body;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
-        contractAddress = await deployContract(contractName, network, compiler, constructParams);
+        contractAddress = await deployContract(contractName, network, compiler, null, constructParams);
         await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
@@ -180,7 +181,7 @@ describe('sol-verifier', () => {
         const contractSource = fs.readFileSync(path, 'UTF-8');
         const parsedData = parser.parse(contractSource).body;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
-        contractAddress = await deployContract(contractName, network, compiler, constructParams);
+        contractAddress = await deployContract(contractName, network, compiler, null, constructParams);
         await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
@@ -207,6 +208,57 @@ describe('sol-verifier', () => {
       }catch(err){
         err.message.should.equal('More Than One Contracts in File, Pass the Contract Name');
       }
+    });
+  });
+
+  describe('Deploying & Verifying contract with import', () => {
+    let contractAddress;
+    let contractName;
+    let network;
+    let sampleData;
+
+    it('Deploys & verifies contract with relative file import successfully', async () => {
+      contractName = 'SampleWithImport';
+      network = 'ropsten';
+      const pathToDeploy = __dirname + '/contracts/'+ 'SampleWithImport_merged' +'.sol'; // Pre merged contract
+      const pathToVerify = __dirname + '/contracts/'+ contractName +'.sol';
+      const pragma = await getPragma(pathToVerify);
+      const contractSource = await processFile(pathToVerify, true);
+      const parsedData = parser.parse(pragma + '\n\n' + contractSource).body;
+      const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
+      contractAddress = await deployContract(contractName, network, compiler, pathToDeploy);
+      await sleep(30000); // To make sure that contractCode is stored
+      sampleData = {
+        key     : process.env.KEY,
+        path    : pathToVerify,
+        contractAddress:  contractAddress,
+        network : network,
+        contractName    :  contractName,
+      };
+      const response = await Verifier.verifyContract(sampleData);
+      response.status.should.equal('1');
+    });
+
+    it('Deploys & verifies contract with node_modules file import successfully', async () => {
+      contractName = 'SampleWithNodeModulesImport';
+      network = 'ropsten';
+      const pathToDeploy = __dirname + '/contracts/'+ 'SampleWithNodeModulesImport_merged' +'.sol';
+      const pathToVerify = __dirname + '/contracts/'+ contractName +'.sol';
+      const pragma = await getPragma(pathToVerify);
+      const contractSource = await processFile(pathToVerify, true);
+      const parsedData = parser.parse(pragma + '\n\n' + contractSource).body;
+      const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
+      contractAddress = await deployContract(contractName, network, compiler, pathToDeploy);
+      await sleep(30000); // To make sure that contractCode is stored
+      sampleData = {
+        key     : process.env.KEY,
+        path    : pathToVerify,
+        contractAddress:  contractAddress,
+        network : network,
+        contractName    :  contractName,
+      };
+      const response = await Verifier.verifyContract(sampleData);
+      response.status.should.equal('1');
     });
   });
 });

@@ -34,7 +34,6 @@
     "commander": "^2.19.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
-    "solc": "^0.5.7",
     "solparse": "^2.2.5",
     "truffle-hdwallet-provider": "0.0.6",
     "web3": "1.0.0-beta.37"
