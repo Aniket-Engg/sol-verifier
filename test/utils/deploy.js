@@ -6,7 +6,7 @@ const solc = require('./solc');
 
 
 module.exports.deployContract = async (contractName, network, compiler, contractPath = null, initParams = [], optimize = false) => {// eslint-disable-line max-len
-  const net = 'https://' + network +'.infura.io/v3/';
+  const net = 'https://' + network +'.infura.io/';
   const web3 = new Web3(new HDWalletProvider(process.env.SEED, net));
   if(!contractPath)
     contractPath = __dirname + '/../contracts/'+ contractName + '.sol';
