@@ -1,4 +1,4 @@
-pragma solidity ^0.5.7;
+pragma solidity ^0.5.6;
 
 contract Sample {
     uint public  n;
@@ -9,5 +9,12 @@ contract Sample {
 
     function get() public view  returns (uint) {
         return n;
+    }
+}
+
+contract SampleWithImport is Sample{
+
+    function increment(uint _n) public pure returns (uint) {
+        return _n++;
     }
 }
