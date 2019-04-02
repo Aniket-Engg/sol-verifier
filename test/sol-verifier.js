@@ -95,7 +95,7 @@ describe('sol-verifier', () => {
     before('Compile & Deploy Sample.sol', async () => {
       try{
         contractName = 'Sample';
-        network = 'goerli';
+        network = 'ropsten';
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
         const parsedData = parser.parse(contractSource).body;

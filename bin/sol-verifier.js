@@ -44,7 +44,7 @@ else{
       }
     })
     .catch(function (error){
-      console.log(clc.red('Error: ' + error));
+      console.log(clc.red('Error: ' + error.message));
     });
 }
 
