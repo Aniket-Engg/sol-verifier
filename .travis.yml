@@ -16,6 +16,6 @@ jobs:
       name: "Unit tests"
       script: 
         - cd test && npm install 
-        - npm run test && npm run coverage
+        - cd .. && npm run test && npm run coverage
     
 
