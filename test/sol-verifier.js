@@ -74,7 +74,7 @@ describe('sol-verifier', () => {
       try{
         await Verifier.verifyContract(temp);
       }catch(err){
-        err.message.should.equal('Invalid Network Passed');
+        err.message.should.equal('Invalid Network/Network Not Supported!!!');
       }
     });
 
@@ -160,7 +160,7 @@ describe('sol-verifier', () => {
       try{
         await Verifier.verifyContract(sampleData);
       }catch(err){
-        err.message.should.equal('Constructor Found, Pass the Constructor Parameter Values');
+        err.message.should.equal('Constructor Found!!! Please Provide --constructParams Option');
       }
     });
   });
@@ -206,7 +206,7 @@ describe('sol-verifier', () => {
       try{
         await Verifier.verifyContract(sampleData);
       }catch(err){
-        err.message.should.equal('More Than One Contracts in File, Pass the Contract Name');
+        err.message.should.equal('More Than One Contracts in File!!! Please Provide --contractName Option');
       }
     });
   });

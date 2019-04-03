@@ -29,7 +29,7 @@ describe('sol-Releases', () => {
       try {
         await solReleases.getCompilerVersion(parsedData, mockMap);
       } catch(err){
-        err.message.should.equal('Unsupported Compiler Version');
+        err.message.should.equal('Unsupported Compiler Version!!!');
       }
     });
   });
@@ -45,7 +45,7 @@ describe('sol-Releases', () => {
       try {
         await solReleases.getCompilerVersion(parsedData, mockMap);
       } catch(err){
-        err.message.should.equal('No Pragma Specified !!!');
+        err.message.should.equal('No Pragma Specified!!!');
       }
     });
   });
