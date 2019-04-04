@@ -44,6 +44,8 @@ describe('sol-verifier', () => {
       const response = await Verifier.verifyContract(sampleData);
       await sleep(30000);
       response.status.should.equal('1');
+      let result = await Verifier.verifyStatus(response.result);
+      result.status.should.equal('1');
     });
 
     it('Trying to verify already verified contract (should fail)', async () => {
@@ -116,6 +118,9 @@ describe('sol-verifier', () => {
       };
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
+      await sleep(20000);
+      let result = await Verifier.verifyStatus(response.result);
+      result.status.should.equal('1');
     });
   });
 
@@ -153,6 +158,9 @@ describe('sol-verifier', () => {
       };
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
+      await sleep(20000);
+      let result = await Verifier.verifyStatus(response.result);
+      result.status.should.equal('1');
     });
 
     it('Trying to verify SampleWithConstructor contract without passing constructor values (should fail)', async () => {
@@ -199,6 +207,9 @@ describe('sol-verifier', () => {
       };
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
+      await sleep(20000);
+      let result = await Verifier.verifyStatus(response.result);
+      result.status.should.equal('1');
     });
 
     it('Trying to verify MultiContractSample contract with passing contractName(should fail)', async () => {
@@ -237,6 +248,9 @@ describe('sol-verifier', () => {
       };
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
+      await sleep(20000);
+      let result = await Verifier.verifyStatus(response.result);
+      result.status.should.equal('1');
     });
 
     it('Deploys & verifies contract with node_modules file import successfully', async () => {
@@ -259,6 +273,9 @@ describe('sol-verifier', () => {
       };
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
+      await sleep(20000);
+      let result = await Verifier.verifyStatus(response.result);
+      result.status.should.equal('1');
     });
   });
 });

@@ -23,11 +23,20 @@ module.exports.compile = async (contractPath, contractName, enableOptimization, 
 
   if(enableOptimization)
     input.settings.optimizer = { enabled: true };
-  const loadRemoteVersion = util.promisify(solc.loadRemoteVersion);
-  const remoteSolc = await loadRemoteVersion(compiler);
-  const compilationData = JSON.parse(remoteSolc.compile(JSON.stringify(input))).contracts['sample.sol'][contractName];
+  
+  let compilationData;
+  const solcversion = require('../package.json').dependencies.solc
+  let solv = solcversion.slice(1);
+  let pragmaVersion = compiler.slice(1,6)
+  if(solv == pragmaVersion) {
+    compilationData = JSON.parse(solc.compile(JSON.stringify(input))).contracts['sample.sol'][contractName];
+  } else {
+    const loadRemoteVersion = util.promisify(solc.loadRemoteVersion);
+    const remoteSolc = await loadRemoteVersion(compiler);
+    compilationData = JSON.parse(remoteSolc.compile(JSON.stringify(input))).contracts['sample.sol'][contractName];
+  }
   const result = {};
-  result.bytecode = compilationData.evm.bytecode.object;
-  result.abi = compilationData.abi;
-  return result;
+    result.bytecode = compilationData.evm.bytecode.object;
+    result.abi = compilationData.abi;
+    return result;
 };
