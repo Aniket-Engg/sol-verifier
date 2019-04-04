@@ -44,7 +44,7 @@ describe('sol-verifier', () => {
       const response = await Verifier.verifyContract(sampleData);
       await sleep(30000);
       response.status.should.equal('1');
-      let result = await Verifier.verifyStatus(response.result);
+      const result = await Verifier.verifyStatus(response.result);
       result.status.should.equal('1');
     });
 
@@ -119,7 +119,7 @@ describe('sol-verifier', () => {
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
       await sleep(20000);
-      let result = await Verifier.verifyStatus(response.result);
+      const result = await Verifier.verifyStatus(response.result);
       result.status.should.equal('1');
     });
   });
@@ -159,7 +159,7 @@ describe('sol-verifier', () => {
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
       await sleep(20000);
-      let result = await Verifier.verifyStatus(response.result);
+      const result = await Verifier.verifyStatus(response.result);
       result.status.should.equal('1');
     });
 
@@ -208,7 +208,7 @@ describe('sol-verifier', () => {
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
       await sleep(20000);
-      let result = await Verifier.verifyStatus(response.result);
+      const result = await Verifier.verifyStatus(response.result);
       result.status.should.equal('1');
     });
 
@@ -249,7 +249,7 @@ describe('sol-verifier', () => {
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
       await sleep(20000);
-      let result = await Verifier.verifyStatus(response.result);
+      const result = await Verifier.verifyStatus(response.result);
       result.status.should.equal('1');
     });
 
@@ -274,7 +274,7 @@ describe('sol-verifier', () => {
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
       await sleep(20000);
-      let result = await Verifier.verifyStatus(response.result);
+      const result = await Verifier.verifyStatus(response.result);
       result.status.should.equal('1');
     });
   });
