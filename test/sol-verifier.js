@@ -23,12 +23,13 @@ describe('sol-verifier', () => {
     before('Deploy Sample.sol', async () => {
       try{
         contractName = 'Sample';
-        network = 'ropsten';
+        network = 'rinkeby';
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
         const parsedData = parser.parse(contractSource).body;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
         contractAddress = await deployContract(contractName, network, compiler);
+        console.log(contractAddress);
         await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
@@ -44,26 +45,28 @@ describe('sol-verifier', () => {
       const response = await Verifier.verifyContract(sampleData);
       await sleep(30000);
       response.status.should.equal('1');
-      const result = await Verifier.verifyStatus(response.result);
-      result.status.should.equal('1');
     });
 
     it('Trying to verify already verified contract (should fail)', async () => {
       await sleep(30000); // To make sure that etherscan gets sufficient time to verify the contract above
-      const response = await Verifier.verifyContract(sampleData);
-      response.status.should.equal('0');
-      response.result.should.equal('Contract source code already verified');
+      try {
+        await Verifier.verifyContract(sampleData);
+      }catch(error) {
+        error.message.should.equal('Contract source code already verified');
+      }
     });
 
     it('Trying to verify contract without passing Etherscan API key (should fail)', async () => {
-      const temp = {
-        key: '',
-        path : path,
-        contractAddress:  contractAddress,
-        network  : network };
-      const response = await Verifier.verifyContract(temp);
-      response.status.should.equal('0');
-      response.result.should.equal('Missing or invalid ApiKey');
+      try{
+        const temp = {
+          key: '',
+          path : path,
+          contractAddress:  contractAddress,
+          network  : network };
+        await Verifier.verifyContract(temp);  
+      }catch(error) {
+        error.message.should.equal('Missing or invalid ApiKey');
+      }
     });
 
     it('Trying to verify contract by passing non-existing Ethereum network (should fail)', async () => {
@@ -81,10 +84,13 @@ describe('sol-verifier', () => {
     });
 
     it('Trying to verify contract by passing invalid contract address (should fail)', async () => {
-      sampleData.contractAddress = '0x1234567890';
-      const response = await Verifier.verifyContract(sampleData);
-      response.status.should.equal('0');
-      response.result.should.equal('Missing or invalid contractAddress (should start with 0x)');
+      try{
+        sampleData.contractAddress = '0x1234567890';
+        const response = await Verifier.verifyContract(sampleData);
+      } catch (error) {
+        error.message.should.equal('Missing or invalid contractAddress (should start with 0x)');
+      }
+      
     });
   });
 
@@ -97,7 +103,7 @@ describe('sol-verifier', () => {
     before('Compile & Deploy Sample.sol', async () => {
       try{
         contractName = 'Sample';
-        network = 'ropsten';
+        network = 'rinkeby';
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
         const parsedData = parser.parse(contractSource).body;
@@ -118,9 +124,6 @@ describe('sol-verifier', () => {
       };
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
-      await sleep(20000);
-      const result = await Verifier.verifyStatus(response.result);
-      result.status.should.equal('1');
     });
   });
 
@@ -135,7 +138,7 @@ describe('sol-verifier', () => {
     before('Deploy SampleWithConstructor.sol', async () => {
       try{
         contractName = 'SampleWithConstructor';
-        network = 'ropsten';
+        network = 'rinkeby';
         constructParams.push(50);
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
@@ -158,12 +161,10 @@ describe('sol-verifier', () => {
       };
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
-      await sleep(20000);
-      const result = await Verifier.verifyStatus(response.result);
-      result.status.should.equal('1');
     });
 
     it('Trying to verify SampleWithConstructor contract without passing constructor values (should fail)', async () => {
+      await sleep(10000);
       sampleData.cvalues = null;
       try{
         await Verifier.verifyContract(sampleData);
@@ -183,7 +184,7 @@ describe('sol-verifier', () => {
     before('Deploy MultiContractSample.sol', async () => {
       try{
         contractName = 'MultiContractSample';
-        network = 'ropsten';
+        network = 'rinkeby';
         constructParams.push(40);
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
@@ -207,12 +208,10 @@ describe('sol-verifier', () => {
       };
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
-      await sleep(20000);
-      const result = await Verifier.verifyStatus(response.result);
-      result.status.should.equal('1');
     });
 
     it('Trying to verify MultiContractSample contract with passing contractName(should fail)', async () => {
+      await sleep(10000);
       sampleData.contractName = null;
       try{
         await Verifier.verifyContract(sampleData);
@@ -230,7 +229,7 @@ describe('sol-verifier', () => {
 
     it('Deploys & verifies contract with relative file import successfully', async () => {
       contractName = 'SampleWithImport';
-      network = 'ropsten';
+      network = 'rinkeby';
       const pathToDeploy = __dirname + '/contracts/'+ 'SampleWithImport_merged' +'.sol'; // Pre merged contract
       const pathToVerify = __dirname + '/contracts/'+ contractName +'.sol';
       const pragma = await getPragma(pathToVerify);
@@ -238,7 +237,7 @@ describe('sol-verifier', () => {
       const parsedData = parser.parse(pragma + '\n\n' + contractSource).body;
       const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
       contractAddress = await deployContract(contractName, network, compiler, pathToDeploy);
-      await sleep(30000); // To make sure that contractCode is stored
+      await sleep(40000); // To make sure that contractCode is stored
       sampleData = {
         key     : process.env.KEY,
         path    : pathToVerify,
@@ -248,14 +247,11 @@ describe('sol-verifier', () => {
       };
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
-      await sleep(20000);
-      const result = await Verifier.verifyStatus(response.result);
-      result.status.should.equal('1');
     });
 
     it('Deploys & verifies contract with node_modules file import successfully', async () => {
       contractName = 'SampleWithNodeModulesImport';
-      network = 'ropsten';
+      network = 'rinkeby';
       const pathToDeploy = __dirname + '/contracts/'+ 'SampleWithNodeModulesImport_merged' +'.sol';
       const pathToVerify = __dirname + '/contracts/'+ contractName +'.sol';
       const pragma = await getPragma(pathToVerify);
@@ -263,7 +259,7 @@ describe('sol-verifier', () => {
       const parsedData = parser.parse(pragma + '\n\n' + contractSource).body;
       const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
       contractAddress = await deployContract(contractName, network, compiler, pathToDeploy);
-      await sleep(30000); // To make sure that contractCode is stored
+      await sleep(40000); // To make sure that contractCode is stored
       sampleData = {
         key     : process.env.KEY,
         path    : pathToVerify,
@@ -273,9 +269,6 @@ describe('sol-verifier', () => {
       };
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
-      await sleep(20000);
-      const result = await Verifier.verifyStatus(response.result);
-      result.status.should.equal('1');
     });
   });
 });
