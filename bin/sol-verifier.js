@@ -35,7 +35,7 @@ program
       const availableNets = await getNetwork(program.address);
       if(availableNets.length == 1){
         network = availableNets[0];
-        console.log(clc.green(`Contract Address Found on ${network} Network!!! Verifying ...`));
+        console.log(clc.yellow(`Contract Address Found on ${network} Network!!! Verifying ...`));
       }
       else{
         console.log(clc.red(`Contract Address Found on ${availableNets} Networks. Please Provide --network Option.`));
@@ -55,19 +55,19 @@ program
     };
 
     try{
-      const res = await verify(data);
+      const res = await verify(data, true);
       if(res.status == '1'){
-        console.log(clc.green('Contract has been successfully verified. Your GUID receipt : ' + res.result));
+        console.log(clc.green('Info: Contract has been successfully verified.'));
       }
       else if(res.status == '0'){
-        console.log(clc.red('Error: ' + res.result));
+        if(res.result == 'Fail - Unable to verify')
+          console.log(clc.red('Error: Contract could not be verified.'));
+        else
+          console.log(clc.red('Error: ' + res.result));
       }
     }catch(error){
-      throw error;
+      console.log(clc.red('Error: ' + error.message));
     }
   }
 })();
-
-
-
 
