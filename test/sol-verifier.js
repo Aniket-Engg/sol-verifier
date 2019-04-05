@@ -29,7 +29,6 @@ describe('sol-verifier', () => {
         const parsedData = parser.parse(contractSource).body;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
         contractAddress = await deployContract(contractName, network, compiler);
-        console.log(contractAddress);
         await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
