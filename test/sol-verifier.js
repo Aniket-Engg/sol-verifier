@@ -63,7 +63,7 @@ describe('sol-verifier', () => {
           path : path,
           contractAddress:  contractAddress,
           network  : network };
-        await Verifier.verifyContract(temp);  
+        await Verifier.verifyContract(temp);
       }catch(error) {
         error.message.should.equal('Missing or invalid ApiKey');
       }
@@ -90,7 +90,7 @@ describe('sol-verifier', () => {
       } catch (error) {
         error.message.should.equal('Missing or invalid contractAddress (should start with 0x)');
       }
-      
+
     });
   });
 

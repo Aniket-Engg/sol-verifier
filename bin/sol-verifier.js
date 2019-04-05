@@ -55,14 +55,14 @@ program
     };
 
     try{
-      const res = await verify(data,true);
+      const res = await verify(data, true);
       if(res.status == '1'){
         console.log(clc.green('Info: Contract has been successfully verified.'));
       }
       else if(res.status == '0'){
         if(res.result == 'Fail - Unable to verify')
-          console.log(clc.red('Error: Contract could not be verified.'));          
-        else 
+          console.log(clc.red('Error: Contract could not be verified.'));
+        else
           console.log(clc.red('Error: ' + res.result));
       }
     }catch(error){
