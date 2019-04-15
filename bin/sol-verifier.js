@@ -8,7 +8,7 @@ const { getNetwork } = require('../utils/network');
 
 program
   .version(require('../package.json').version, '-v, --version')
-  .option('-k, --key <etherscan-api-key>', 'Add Etherscan API Key (required)')
+  .option('-k, --key <etherscan-api-key>', 'Add Etherscan API Key (recommended but optional)')
   .option('-c, --contract <path-to-solidity-contract-file>', 'Add Contract File Path (required)')
   .option('-a, --address <contract-address>', 'Add Address of Deployed Contract (required)')
   .option('-n, --network <network>', 'Add Ethereum Network on Which Contract is deployed (if applicable)')
@@ -17,15 +17,22 @@ program
   .option('-o, --optimize', 'Add This Flag to Optimize The Contract (optional)')
   .parse(process.argv);
 
-(async function formalize (){
+(async function (){
   let network;
+  let key;
 
-  if(!program.key || !program.contract || !program.address)
+  if(!program.contract || !program.address)
   {
-    console.log(clc.red('Error: Required Parameter Not Passed'));
+    console.log(clc.red('Error: Missing Required Parameter. Please Provide --contract & --address Both Options.'));
     program.outputHelp();
   }
   else{
+    if(!program.key)
+    //It is recommended to use your own API key. This key is once/twice to use to make the package user-friendly.
+      key = 'JHVMB2A24SC4QYGA9KYINSQEUFU9CSHDAK';
+    else
+      key = program.key;
+
     if(program.constructParams)
       program.constructParams = program.constructParams.slice(1, (program.constructParams.length -1)).split(',');
 
@@ -45,7 +52,7 @@ program
     }
 
     const data = {
-      key             :   program.key,
+      key             :   key,
       path            :   program.contract,
       contractAddress :   program.address,
       network         :   network,
