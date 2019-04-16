@@ -127,6 +127,39 @@ describe('sol-verifier', () => {
   });
 
 
+  describe('Compiling & Verifying SampleOld.sol with version 0.4.18', () => {
+    let contractAddress;
+    let contractName;
+    let network;
+    let sampleData;
+    let path;
+    before('Compile & Deploy SampleOld.sol', async () => {
+      try{
+        contractName = 'SampleOld';
+        network = 'rinkeby';
+        path = __dirname + '/contracts/'+ contractName +'.sol';
+        const contractSource = fs.readFileSync(path, 'UTF-8');
+        const parsedData = parser.parse(contractSource).body;
+        const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
+        contractAddress = await deployContract(contractName, network, compiler, null, [], false);
+        await sleep(30000); // To make sure that contractCode is stored
+      }catch(err){
+        throw err;
+      }
+    });
+    it('Verifies SampleOld.sol contract successfully with old way of defining constructor', async () => {
+      sampleData = {
+        key: process.env.KEY,
+        path : path,
+        contractAddress:  contractAddress,
+        network  : network,
+      };
+      const response = await Verifier.verifyContract(sampleData);
+      response.status.should.equal('1');
+    });
+  });
+
+
   describe('Deploying & Verifying SampleWithConstructor.sol', () => {
     let contractAddress;
     let contractName;
