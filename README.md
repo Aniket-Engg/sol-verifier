@@ -2,19 +2,14 @@
 [![Build status](https://travis-ci.com/Aniket-Engg/sol-verifier.svg?branch=master)](https://travis-ci.com/Aniket-Engg/sol-verifier)
 [![Coverage Status](https://coveralls.io/repos/github/Aniket-Engg/sol-verifier/badge.svg?branch=master)](https://coveralls.io/github/Aniket-Engg/sol-verifier?branch=master)
 [![npm](https://img.shields.io/npm/dt/sol-verifier.svg)](https://www.npmjs.com/package/sol-verifier)
+![NPM](https://img.shields.io/npm/l/sol-verifier.svg)
+[![Package Quality](https://npm.packagequality.com/shield/sol-verifier.svg)](https://packagequality.com/#?package=sol-verifier)
 
 # sol-verifier
-Verifying a contract on etherscan make your contract global and eligible for reading and writing on Etherscan. sol-verifier is an npm package which can be used to verify the ethereum contracts on Etherscan. It internally uses the Etherscan API.
-
-## Prerequisites
-Make sure you have:
-* [Node.js](https://nodejs.org/en/) installed on your system
-* Etherscan Ethereum Developer [API](https://etherscan.io/apis) key-token
-* Address on which contract is deployed on the network
-* Constructor parameters values (if applicable)
+sol-verifier is an NPM package to verify the Solidity smart contracts on Etherscan. It works as a CLI tool and can be used inside the js file too. 
 
 ## Install
-As a dependency, to use inside the code:
+As a dependency, to use inside a file:
 ```
 npm install --save sol-verifier
 ```
@@ -27,76 +22,86 @@ As a global npm module, to use `sol-verifier` as an executable:
 npm install -g sol-verifier
 ```
 
-## Run
+## How to use
 
-### As CLI
-sol-verifier has multiple available options some of them are required and some depends on the usecase. One can see all the available options by using `--help` option.
+### As a CLI tool
+sol-verifier has multiple available options. some of them are required and some depends on the usecase. One can see all the available options by using `--help` option.
 ```
 $ sol-verifier --help
 Usage: sol-verifier [options]
 
 Options:
   -v, --version                                    output the version number
-  -k, --key <etherscan-api-key>                    Add Etherscan API Key (required)
+  -k, --key <etherscan-api-key>                    Add Etherscan API Key (recommended but optional)
   -c, --contract <path-to-solidity-contract-file>  Add Contract File Path (required)
   -a, --address <contract-address>                 Add Address of Deployed Contract (required)
-  -n, --network <network>                          Add Ethereum Network on Which Contract is deployed (required)
+  -n, --network <network>                          Add Ethereum Network on Which Contract is deployed (if applicable)
   -N, --contractName <contract-name>               Add Contract Name if Passed File Contains More Than One Contract (if applicable)
-  -p, --constructParams [param1, param2,...]       Add Constructor parameter values same as in deployment (if applicable)
+  -p, --constructParams [param1, param2,...]       Add Constructor Parameter Values Same as in Deployment (if applicable)
   -o, --optimize                                   Add This Flag to Optimize The Contract (optional)
   -h, --help                                       output usage information 
 ```
-In an extensive case, where you have a file containing more than one contract and contract have a constructor which accepts some values at the time of deployment, you can use following commands for verifying contract on Etherscan. 
+Keeping the user-friendliness in mind, sol-verifier process certain information internally until it is explicitly required. For example, in a minimum case, if someone deploys a contract as below on some Ethereum network(which exists only on one network),
+```
+pragma solidity ^0.5.7;
+
+contract SimpleStorage {
+    uint storedData;
+
+    function set(uint x) public {
+        storedData = x;
+    }
+
+    function get() public view returns (uint) {
+        return storedData;
+    }
+}
+```
+by CLI, it can be verified with this command:
+```
+> sol-verifier -c <contract-file-path> -a <contract-address>
+```
+That's it.
+
+In an extensive one, where you have a contract importing some other contracts and having constructor with parameters,it can be verified with this command:
 ```
 sol-verifier -k <etherscan-api-key> -c <contract-file-path> -a <contract-address> -n <network i.e. mainnet, ropsten etc.> -p <constructor-params-values as: [param1,param2]> -N <contract-name>
 ```
-You can add flag `-o` to enable the optimization of contract. On successful verification, you will get response as :
+If contract is deployed by enabling optimization, flag `-o` can be used to enable the optimization during verification. On successful verification, you will get response as :
 ```
-Contract has been successfully verified. Your GUID receipt : zkelnp3uxnr4qg3tcxsbdt8jnbdl96jevcb268c5uru4nhmgqn
+Info: Contract has been successfully verified.
 ```
 
-### By requiring in Node.js file
-Require the module after installation.
+### By requiring in file
+A request object will be passed to verify contract. See below: (Make sure keys of request object will be always same)
 ```
-const verifier = require('sol-verifier');
-```
-Now create the request object to pass as: (Make sure keys of request object will be always same.)
-```
+    const verifier = require('sol-verifier');
     var data = {
-        key: 'etherscan-api-key',  // Etherscan API key (required)
-        path : '/path/to/contract/file/sample.sol', // Contract file path(required)
-        contractAddress:  '0x123456789.......',     // Contract address (required)
-        network  : 'mainnet/ropsten/rinkeby/kovan',   // Ethereum network used (required)
-        contractName: 'Sample'  // Contract name, applicable only if contract file has more than one contracts
-        cvalues   : [constructor, values, in, array],     // constructor value in array, applicable if contract has constructor
-        optimizationFlag: false // Depends how you have compiled your contract (Default: false)
+        key: 'etherscan-api-key',                       // Etherscan API key (required)
+        path : '/path/to/contract/contractName.sol',    // Contract file path(required)
+        contractAddress:  '0x123456789.......',         // Contract address (required)
+        network  : 'mainnet/ropsten/rinkeby/kovan',     // Ethereum network used (required)
+        contractName: 'contractName'                    // Contract name, only if contract file has more than one contracts
+        cvalues   : [constructor, values, in, array],   // constructor values in array, only if contract has constructor
+        optimizationFlag: false                         // Set `true` to enable optimization (Default: false)
     };
 
-    verifier.verifyContract(data).then(function(res){
-        console.log(res);
-    })
-    .catch(function(error){
-        console.log(error);
-    });
+    await verifier.verifyContract(data);
 ```
-Parameters not applicable in your usecase can be ignored. Success response will look like:
-```
-{ status: '1',
-  message: 'OK',
-  result: 'zkelnp3uxnr4qg3tcxsbdt8jnbdl96jevcb268c5uru4nhmgqn' }
-```
-You will get a different GUID (from above response) everytime. This GUID receipt can be used to track the status of verification in the bottom section [here](https://etherscan.io/sourcecode-demo.html). (Choose the right URL according to the used network)
+Parameters not applicable can be ignored.
 
-**Note:** Getting GUID back doesn't ensure the contract verification, unless it show `>> Pass - Verified` in the status while checking at above given link.
-## Limitations
-
+## Points to remember
 * This doesn't provide support for libraries.
 * Works for solidity version `>0.4.11`.
-* Doesn't support `import` statements in contract file. Use available packages to flatten the contract.
 * The Etherscan API that this module uses is in BETA state.
+* Maximum time for processing verification request is 30 seconds. If request timed out, check final result on Etherscan itself.
 
-## Contribution/Suggestions
-Each kind of contributions even a single suggestion or feedback makes the project mature and reliable, so any such contributions are most welcome!
+## Contribution
+[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/Aniket-Engg/sol-verifier/issues)
+
+Each kind of contributions even a single suggestion or feedback makes project mature and reliable.
 
 ## License
 [MIT](https://github.com/Aniket-Engg/sol-verifier/blob/master/LICENSE)
+
+### <i>Powered by Etherscan.io APIs</i>
