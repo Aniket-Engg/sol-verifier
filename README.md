@@ -59,13 +59,13 @@ contract SimpleStorage {
 ```
 by CLI, it can be verified with this command:
 ```
-> sol-verifier -c <contract-file-path> -a <contract-address>
+$ sol-verifier -c <contract-file-path> -a <contract-address>
 ```
 That's it.
 
 In an extensive one, where you have a contract importing some other contracts and having constructor with parameters,it can be verified with this command:
 ```
-sol-verifier -k <etherscan-api-key> -c <contract-file-path> -a <contract-address> -n <network i.e. mainnet, ropsten etc.> -p <constructor-params-values as: [param1,param2]> -N <contract-name>
+$ sol-verifier -k <etherscan-api-key> -c <contract-file-path> -a <contract-address> -n <network i.e. mainnet, ropsten etc.> -p <constructor-params-values as: [param1,param2]> -N <contract-name>
 ```
 If contract is deployed by enabling optimization, flag `-o` can be used to enable the optimization during verification. On successful verification, you will get response as :
 ```
@@ -92,7 +92,7 @@ Parameters not applicable can be ignored.
 
 ## Points to remember
 * This doesn't provide support for libraries.
-* Works for solidity version `>0.4.11`.
+* Works for solidity version `> 0.4.11`.
 * The Etherscan API that this module uses is in BETA state.
 * Maximum time for processing verification request is 30 seconds. If request timed out, check final result on Etherscan itself.
 
