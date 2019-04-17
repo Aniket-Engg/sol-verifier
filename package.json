@@ -1,7 +1,7 @@
 {
   "name": "sol-verifier",
-  "version": "1.1.2",
-  "description": "Verify Solidity Contracts on Etherscan",
+  "version": "1.2.0",
+  "description": "Verify Solidity Smart Contracts on Etherscan",
   "main": "index.js",
   "scripts": {
     "lint": "eslint .",
@@ -21,7 +21,9 @@
     "solidity",
     "verifier",
     "ethereum",
-    "smart-contract"
+    "smart-contract",
+    "sol-verifier",
+    "contract-verification"
   ],
   "author": "Aniket-Engg",
   "license": "MIT",
