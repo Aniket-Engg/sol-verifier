@@ -1,6 +1,6 @@
 'use strict';
 const fs = require('fs');
-const parser = require('solparse');
+const parser = require('solidity-parser-antlr');
 const Verifier = require('../index');
 const { deployContract } = require('./utils/deploy');
 const solReleases = require('../lib/solReleases');
@@ -26,7 +26,7 @@ describe('sol-verifier', () => {
         network = 'rinkeby';
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
-        const parsedData = parser.parse(contractSource).body;
+        const parsedData = parser.parse(contractSource).children;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
         contractAddress = await deployContract(contractName, network, compiler);
         await sleep(30000); // To make sure that contractCode is stored
@@ -85,7 +85,7 @@ describe('sol-verifier', () => {
     it('Trying to verify contract by passing invalid contract address (should fail)', async () => {
       try{
         sampleData.contractAddress = '0x1234567890';
-        const response = await Verifier.verifyContract(sampleData);
+        await Verifier.verifyContract(sampleData);
       } catch (error) {
         error.message.should.equal('Missing or invalid contractAddress (should start with 0x)');
       }
@@ -105,7 +105,7 @@ describe('sol-verifier', () => {
         network = 'rinkeby';
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
-        const parsedData = parser.parse(contractSource).body;
+        const parsedData = parser.parse(contractSource).children;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
         contractAddress = await deployContract(contractName, network, compiler, null, [], true);
         await sleep(30000); // To make sure that contractCode is stored
@@ -139,7 +139,7 @@ describe('sol-verifier', () => {
         network = 'rinkeby';
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
-        const parsedData = parser.parse(contractSource).body;
+        const parsedData = parser.parse(contractSource).children;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
         contractAddress = await deployContract(contractName, network, compiler, null, [], false);
         await sleep(30000); // To make sure that contractCode is stored
@@ -174,7 +174,7 @@ describe('sol-verifier', () => {
         constructParams.push(50);
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
-        const parsedData = parser.parse(contractSource).body;
+        const parsedData = parser.parse(contractSource).children;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
         contractAddress = await deployContract(contractName, network, compiler, null, constructParams);
         await sleep(30000); // To make sure that contractCode is stored
@@ -220,7 +220,7 @@ describe('sol-verifier', () => {
         constructParams.push(40);
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
-        const parsedData = parser.parse(contractSource).body;
+        const parsedData = parser.parse(contractSource).children;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
         contractAddress = await deployContract(contractName, network, compiler, null, constructParams);
         await sleep(30000); // To make sure that contractCode is stored
@@ -266,7 +266,7 @@ describe('sol-verifier', () => {
       const pathToVerify = __dirname + '/contracts/'+ contractName +'.sol';
       const pragma = await getPragma(pathToVerify);
       const contractSource = await processFile(pathToVerify, true);
-      const parsedData = parser.parse(pragma + '\n\n' + contractSource).body;
+      const parsedData = parser.parse(pragma + '\n\n' + contractSource).children;
       const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
       contractAddress = await deployContract(contractName, network, compiler, pathToDeploy);
       await sleep(40000); // To make sure that contractCode is stored
@@ -288,7 +288,7 @@ describe('sol-verifier', () => {
       const pathToVerify = __dirname + '/contracts/'+ contractName +'.sol';
       const pragma = await getPragma(pathToVerify);
       const contractSource = await processFile(pathToVerify, true);
-      const parsedData = parser.parse(pragma + '\n\n' + contractSource).body;
+      const parsedData = parser.parse(pragma + '\n\n' + contractSource).children;
       const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
       contractAddress = await deployContract(contractName, network, compiler, pathToDeploy);
       await sleep(40000); // To make sure that contractCode is stored
