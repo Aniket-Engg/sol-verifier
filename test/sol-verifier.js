@@ -302,5 +302,31 @@ describe('sol-verifier', () => {
       const response = await Verifier.verifyContract(sampleData);
       response.status.should.equal('1');
     });
+
+    it('Deploys & verifies contract with node_modules file import successfully', async () => {
+      contractName = 'SampleWithUserDefinedType';
+      network = 'rinkeby';
+      const constructParams = [];
+      constructParams.push('0x0000000000000000000000000000000000000000');
+      constructParams.push('12345');
+      const pathToDeploy = __dirname + '/contracts/'+ 'SampleWithUserDefinedType_merged' +'.sol';
+      const pathToVerify = __dirname + '/contracts/'+ contractName +'.sol';
+      const pragma = await getPragma(pathToVerify);
+      const contractSource = await processFile(pathToVerify, true);
+      const parsedData = parser.parse(pragma + '\n\n' + contractSource).children;
+      const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
+      contractAddress = await deployContract(contractName, network, compiler, pathToDeploy, constructParams);
+      await sleep(40000); // To make sure that contractCode is stored
+      sampleData = {
+        key     : process.env.KEY,
+        path    : pathToVerify,
+        contractAddress:  contractAddress,
+        network : network,
+        cvalues : constructParams,
+        contractName    :  contractName,
+      };
+      const response = await Verifier.verifyContract(sampleData);
+      response.status.should.equal('1');
+    });
   });
 });
