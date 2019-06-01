@@ -306,7 +306,7 @@ describe('sol-verifier', () => {
     it('Deploys & verifies contract with node_modules file import successfully', async () => {
       contractName = 'SampleWithUserDefinedType';
       network = 'rinkeby';
-      let constructParams = [];
+      const constructParams = [];
       constructParams.push('0x0000000000000000000000000000000000000000');
       constructParams.push('12345');
       const pathToDeploy = __dirname + '/contracts/'+ 'SampleWithUserDefinedType_merged' +'.sol';
