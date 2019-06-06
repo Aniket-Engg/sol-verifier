@@ -171,9 +171,9 @@ describe('sol-verifier', () => {
       try{
         contractName = 'SampleWithConstructor';
         network = 'rinkeby';
-        constructParams.push(["0x416e696b657431","0x416e696b657435"]); // Dynamic size byte array
-        constructParams.push(["250","251","252"]);  // Fix size array
-        constructParams.push("nickname"); // string
+        constructParams.push(['0x416e696b657431', '0x416e696b657435']); // Dynamic size byte array
+        constructParams.push(['250', '251', '252']);  // Fix size array
+        constructParams.push('nickname'); // string
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
         const parsedData = parser.parse(contractSource).children;

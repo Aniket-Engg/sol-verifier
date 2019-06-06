@@ -35,7 +35,7 @@ program
       key = program.key;
 
     if(program.constructParams)
-      program.constructParams = constructParams(program.constructParams.slice(1, (program.constructParams.length -1)).split(','));
+      program.constructParams = constructParams(program.constructParams.slice(1, (program.constructParams.length -1)).split(',')); // eslint-disable-line max-len
 
     if(program.network)
       network = program.network;
