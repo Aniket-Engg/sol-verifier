@@ -171,19 +171,21 @@ describe('sol-verifier', () => {
       try{
         contractName = 'SampleWithConstructor';
         network = 'rinkeby';
-        constructParams.push(50);
+        constructParams.push(["0x416e696b657431","0x416e696b657435"]); // Dynamic size byte array
+        constructParams.push(["250","251","252"]);  // Fix size array
+        constructParams.push("nickname"); // string
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
         const parsedData = parser.parse(contractSource).children;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
         contractAddress = await deployContract(contractName, network, compiler, null, constructParams);
-        await sleep(30000); // To make sure that contractCode is stored
+        await sleep(40000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
       }
     });
 
-    it('Verifies SampleWithConstructor.sol contract successfully', async () => {
+    it('Verifies SampleWithConstructor.sol contract with array params in constructor successfully', async () => {
       sampleData = {
         key     : process.env.KEY,
         path    : path,

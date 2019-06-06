@@ -5,6 +5,7 @@ const clc       = require('cli-color');
 const program     = require('commander');
 const { verify } = require('../lib/verify');
 const { getNetwork } = require('../utils/network');
+const constructParams = require('./../utils/constructParams');
 
 program
   .version(require('../package.json').version, '-v, --version')
@@ -34,7 +35,7 @@ program
       key = program.key;
 
     if(program.constructParams)
-      program.constructParams = program.constructParams.slice(1, (program.constructParams.length -1)).split(',');
+      program.constructParams = constructParams(program.constructParams.slice(1, (program.constructParams.length -1)).split(','));
 
     if(program.network)
       network = program.network;
@@ -60,7 +61,6 @@ program
       cvalues         :   program.constructParams,
       optimizationFlag:   program.optimize,
     };
-
     try{
       const res = await verify(data, true);
       if(res.status == '1'){
