@@ -1,13 +1,17 @@
 pragma solidity ^0.5.1;
 
 contract SampleWithConstructor {
-    uint public  n;
+    bytes32 public name;
+    uint public age;
+    string nick;
 
-    constructor(uint _num) public {
-        n = _num;
+    constructor (bytes32[] memory names, uint[3] memory ages, string memory nickname) public{
+        name = names[0];
+        age = ages[1];
+        nick = nickname;
     }
 
     function get() public view  returns (uint) {
-        return n;
+        return now;
     }
 }
