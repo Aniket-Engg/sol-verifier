@@ -88,7 +88,9 @@ A request object will be passed to verify contract. See below: (Make sure keys o
 
     await verifier.verifyContract(data);
 ```
-Parameters not applicable can be ignored.
+Parameters not applicable can be ignored. 
+
+**Note:** In case of array as constructor parameters, pass values as: [[v1, v2], v3, v4] (This feature is available since version v2.1.0)
 
 ## Points to remember
 * Add specific version with `^` in your contract pragma. Version should be same as the compiler version used while contract deployment.
