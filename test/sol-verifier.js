@@ -305,7 +305,7 @@ describe('sol-verifier', () => {
       response.status.should.equal('1');
     });
 
-    it('Deploys & verifies contract with node_modules file import successfully', async () => {
+    it('Deploys & verifies contract with user defined type in construtor successfully', async () => {
       contractName = 'SampleWithUserDefinedType';
       network = 'rinkeby';
       const constructParams = [];
