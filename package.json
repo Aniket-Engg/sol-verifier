@@ -1,6 +1,6 @@
 {
   "name": "sol-verifier",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Verify Solidity Smart Contracts on Etherscan",
   "main": "index.js",
   "scripts": {
@@ -38,7 +38,7 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "sol-straightener": "^1.0.0",
-    "solidity-parser-antlr": "^0.4.3",
+    "solidity-parser-antlr": "0.4.3",
     "truffle-hdwallet-provider": "0.0.6",
     "web3": "1.0.0-beta.37"
   },
