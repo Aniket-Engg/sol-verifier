@@ -27,7 +27,7 @@ describe('sol-Releases', () => {
       const contractSource = fs.readFileSync(path, 'UTF-8');
       const parsedData = parser.parse(contractSource).children;
       const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
-      compiler.should.equal('v0.5.7+commit.6da8b019');
+      compiler.should.equal('v0.5.12+commit.7709ece9');
     });
   });
 
