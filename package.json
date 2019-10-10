@@ -1,6 +1,6 @@
 {
   "name": "sol-verifier",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Verify Solidity Smart Contracts on Etherscan",
   "main": "index.js",
   "scripts": {
