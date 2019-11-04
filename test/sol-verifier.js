@@ -12,6 +12,8 @@ function sleep (ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+const ETHERSCAN_KEY = process.env.KEY;
+
 describe('sol-verifier', () => {
 
   describe('Deploying & Verifying Sample.sol', () => {
@@ -36,7 +38,7 @@ describe('sol-verifier', () => {
     });
     it('Verifies Sample.sol contract successfully', async () => {
       sampleData = {
-        key: process.env.KEY,
+        key: ETHERSCAN_KEY,
         path : path,
         contractAddress:  contractAddress,
         network  : network,
@@ -70,7 +72,7 @@ describe('sol-verifier', () => {
 
     it('Trying to verify contract by passing non-existing Ethereum network (should fail)', async () => {
       const temp = {
-        key: process.env.KEY,
+        key: ETHERSCAN_KEY,
         path : path,
         contractAddress:  contractAddress,
         network  : 'random',
@@ -115,7 +117,7 @@ describe('sol-verifier', () => {
     });
     it('Verifies Sample.sol contract successfully by enabling optimization', async () => {
       sampleData = {
-        key: process.env.KEY,
+        key: ETHERSCAN_KEY,
         path : path,
         contractAddress:  contractAddress,
         network  : network,
@@ -149,7 +151,7 @@ describe('sol-verifier', () => {
     });
     it('Verifies SampleOld.sol contract successfully with old way of defining constructor', async () => {
       sampleData = {
-        key: process.env.KEY,
+        key: ETHERSCAN_KEY,
         path : path,
         contractAddress:  contractAddress,
         network  : network,
@@ -187,7 +189,7 @@ describe('sol-verifier', () => {
 
     it('Verifies SampleWithConstructor.sol contract with array params in constructor successfully', async () => {
       sampleData = {
-        key     : process.env.KEY,
+        key     : ETHERSCAN_KEY,
         path    : path,
         contractAddress:  contractAddress,
         network : network,
@@ -233,7 +235,7 @@ describe('sol-verifier', () => {
 
     it('Verifies MultiContractSample.sol contract successfully', async () => {
       sampleData = {
-        key     : process.env.KEY,
+        key     : ETHERSCAN_KEY,
         path    : path,
         contractAddress:  contractAddress,
         network : network,
@@ -273,7 +275,7 @@ describe('sol-verifier', () => {
       contractAddress = await deployContract(contractName, network, compiler, pathToDeploy);
       await sleep(40000); // To make sure that contractCode is stored
       sampleData = {
-        key     : process.env.KEY,
+        key     : ETHERSCAN_KEY,
         path    : pathToVerify,
         contractAddress:  contractAddress,
         network : network,
@@ -295,7 +297,7 @@ describe('sol-verifier', () => {
       contractAddress = await deployContract(contractName, network, compiler, pathToDeploy);
       await sleep(40000); // To make sure that contractCode is stored
       sampleData = {
-        key     : process.env.KEY,
+        key     : ETHERSCAN_KEY,
         path    : pathToVerify,
         contractAddress:  contractAddress,
         network : network,
@@ -320,7 +322,7 @@ describe('sol-verifier', () => {
       contractAddress = await deployContract(contractName, network, compiler, pathToDeploy, constructParams);
       await sleep(40000); // To make sure that contractCode is stored
       sampleData = {
-        key     : process.env.KEY,
+        key     : ETHERSCAN_KEY,
         path    : pathToVerify,
         contractAddress:  contractAddress,
         network : network,
