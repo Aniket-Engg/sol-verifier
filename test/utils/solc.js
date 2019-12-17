@@ -13,6 +13,10 @@ module.exports.compile = async (contractPath, contractName, enableOptimization, 
       },
     },
     settings: {
+      optimizer: {
+        enabled: enableOptimization === true || enableOptimization === 1,
+        runs: runs,
+      },
       outputSelection: {
         '*': {
           '*': [ '*' ],
@@ -20,18 +24,6 @@ module.exports.compile = async (contractPath, contractName, enableOptimization, 
       },
     },
   };
-
-  if(enableOptimization) {
-    input.settings.optimizer = {};
-    input.settings.optimizer.enabled = true;
-  }
-
-  if(runs){
-    if(input.settings.optimizer)
-      input.settings.optimizer.runs = runs;
-    else
-      input.settings.optimizer = { runs };
-  }
 
   let compilationData;
   const solcversion = require('../package.json').dependencies.solc;

@@ -15,7 +15,7 @@ program
   .option('-n, --network <network>', 'Add Ethereum Network on Which Contract is deployed (if applicable)')
   .option('-N, --contractName <contract-name>', 'Add Contract Name if Passed File Contains More Than One Contract (if applicable)') // eslint-disable-line max-len
   .option('-p, --constructParams [param1, param2,...]', 'Add Constructor Parameter Values Same as in Deployment (if applicable)') // eslint-disable-line max-len
-  .option('-r, --runs', 'Add Optimizer Runs (optional)')
+  .option('-r, --runs <runs>', 'Add Optimizer Runs (optional, default 200)')
   .option('-o, --optimize', 'Add This Flag to Optimize The Contract (optional)')
   .parse(process.argv);
 
