@@ -21,8 +21,10 @@ module.exports.compile = async (contractPath, contractName, enableOptimization, 
     },
   };
 
-  if(enableOptimization)
+  if(enableOptimization) {
+    input.settings.optimizer = {};
     input.settings.optimizer.enabled = true;
+  }
 
   if(runs){
     if(input.settings.optimizer)
