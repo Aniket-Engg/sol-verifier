@@ -305,7 +305,6 @@ describe('sol-verifier', () => {
         contractName    :  contractName,
       };
       const response = await Verifier.verifyContract(sampleData);
-      console.log('response----', response);
       response.status.should.equal('1');
     });
 
