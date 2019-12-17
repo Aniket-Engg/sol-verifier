@@ -95,7 +95,7 @@ describe('sol-verifier', () => {
     });
   });
 
-  describe('Compiling & Verifying Sample.sol by enabling optimization', () => {
+  describe('Compiling & Verifying Sample.sol by enabling optimization & runs as 2000', () => {
     let contractAddress;
     let contractName;
     let network;
@@ -109,7 +109,7 @@ describe('sol-verifier', () => {
         const contractSource = fs.readFileSync(path, 'UTF-8');
         const parsedData = parser.parse(contractSource).children;
         const compiler = await solReleases.getCompilerVersion(parsedData, mockMap);
-        contractAddress = await deployContract(contractName, network, compiler, null, [], true);
+        contractAddress = await deployContract(contractName, network, compiler, null, [], true, 2000);
         await sleep(30000); // To make sure that contractCode is stored
       }catch(err){
         throw err;
@@ -121,6 +121,7 @@ describe('sol-verifier', () => {
         path : path,
         contractAddress:  contractAddress,
         network  : network,
+        runs  : 2000,
         optimizationFlag: true,  // Optimization Enabled
       };
       const response = await Verifier.verifyContract(sampleData);
@@ -304,6 +305,7 @@ describe('sol-verifier', () => {
         contractName    :  contractName,
       };
       const response = await Verifier.verifyContract(sampleData);
+      console.log('response----', response);
       response.status.should.equal('1');
     });
 
