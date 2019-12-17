@@ -4,7 +4,7 @@ const solc = require('solc');
 const fs = require('fs');
 const util = require('util');
 
-module.exports.compile = async (contractPath, contractName, enableOptimization, compiler) => {
+module.exports.compile = async (contractPath, contractName, enableOptimization, compiler, runs) => {
   const input = {
     language: 'Solidity',
     sources: {
@@ -13,6 +13,10 @@ module.exports.compile = async (contractPath, contractName, enableOptimization, 
       },
     },
     settings: {
+      optimizer: {
+        enabled: enableOptimization === true || enableOptimization === 1,
+        runs: runs,
+      },
       outputSelection: {
         '*': {
           '*': [ '*' ],
@@ -20,9 +24,6 @@ module.exports.compile = async (contractPath, contractName, enableOptimization, 
       },
     },
   };
-
-  if(enableOptimization)
-    input.settings.optimizer = { enabled: true };
 
   let compilationData;
   const solcversion = require('../package.json').dependencies.solc;
