@@ -174,8 +174,8 @@ describe('sol-verifier', () => {
       try{
         contractName = 'SampleWithConstructor';
         network = 'rinkeby';
-        constructParams.push(['0x416e696b657431', '0x416e696b657435']); // Dynamic size byte array
-        constructParams.push(['250', '251', '252']);  // Fix size array
+        constructParams.push(['0x48656c6c6f20576f726c64210000000000000000000000000000000000000000', '0x48656c6c6f20576f726c64220000000000000000000000000000000000000000']); // Dynamic size byte array
+        constructParams.push([250, 251, 252]);  // Fix size array
         constructParams.push('nickname'); // string
         path = __dirname + '/contracts/'+ contractName +'.sol';
         const contractSource = fs.readFileSync(path, 'UTF-8');
@@ -313,7 +313,7 @@ describe('sol-verifier', () => {
       network = 'rinkeby';
       const constructParams = [];
       constructParams.push('0x0000000000000000000000000000000000000000');
-      constructParams.push('12345');
+      constructParams.push(12345);
       const pathToDeploy = __dirname + '/contracts/'+ 'SampleWithUserDefinedType_merged' +'.sol';
       const pathToVerify = __dirname + '/contracts/'+ contractName +'.sol';
       const pragma = await getPragma(pathToVerify);

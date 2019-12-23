@@ -10,7 +10,6 @@ module.exports = (params) => {
         let lastIndex = false;
         const paramArr = [];
         paramArr.push(params[i].replace('[', '').trim());
-        console.log('paramArr----------', paramArr);
         for(let j=i + 1; !lastIndex; j++){
           if(params[j].includes(']')){
             lastIndex = true;
