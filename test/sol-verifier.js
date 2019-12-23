@@ -174,7 +174,7 @@ describe('sol-verifier', () => {
       try{
         contractName = 'SampleWithConstructor';
         network = 'rinkeby';
-        constructParams.push(['0x48656c6c6f20576f726c64210000000000000000000000000000000000000000', '0x48656c6c6f20576f726c64220000000000000000000000000000000000000000']); // Dynamic size byte array
+        constructParams.push(['0x48656c6c6f20576f726c64210000000000000000000000000000000000000000', '0x48656c6c6f20576f726c64220000000000000000000000000000000000000000']); // eslint-disable-line max-len
         constructParams.push([250, 251, 252]);  // Fix size array
         constructParams.push('nickname'); // string
         path = __dirname + '/contracts/'+ contractName +'.sol';
