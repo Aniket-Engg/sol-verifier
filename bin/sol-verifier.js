@@ -9,13 +9,15 @@ const constructParams = require('./../utils/constructParams');
 
 program
   .version(require('../package.json').version, '-v, --version')
-  .option('-k, --key <etherscan-api-key>', 'Add Etherscan API Key (recommended but optional)')
-  .option('-c, --contract <path-to-solidity-contract-file>', 'Add Contract File Path (required)')
-  .option('-a, --address <contract-address>', 'Add Address of Deployed Contract (required)')
-  .option('-n, --network <network>', 'Add Ethereum Network on Which Contract is deployed (if applicable)')
-  .option('-N, --contractName <contract-name>', 'Add Contract Name if Passed File Contains More Than One Contract (if applicable)') // eslint-disable-line max-len
-  .option('-p, --constructParams [param1, param2,...]', 'Add Constructor Parameter Values Same as in Deployment (if applicable)') // eslint-disable-line max-len
-  .option('-r, --runs <runs>', 'Add Optimizer Runs (optional, default 200)')
+  .option('-k, --key <etherscan-api-key>', 'Etherscan API Key (recommended but optional)')
+  .option('-c, --contract <path-to-solidity-contract-file>', 'Contract File Path (required)')
+  .option('-a, --address <contract-address>', 'Address of Deployed Contract (required)')
+  .option('-n, --network <network>', 'Ethereum Network on Which Contract is deployed (if applicable)')
+  .option('-N, --contractName <contract-name>', 'Contract Name if Passed File Contains More Than One Contract (if applicable)') // eslint-disable-line max-len
+  .option('-p, --constructParams [param1, param2,...]', 'Constructor Parameter Values Same as in Deployment (if applicable)') // eslint-disable-line max-len
+  .option('-r, --runs <runs>', 'Optimizer Runs (optional, default 200)')
+  .option('-e, --evmVersion <evm-version>', 'See valid options: https://solidity.readthedocs.io/en/latest/using-the-compiler.html#target-options (optional, default compiler-default)') // eslint-disable-line max-len
+  .option('-l, --licenseType <license-type>', 'Valid codes 1-12, see https://etherscan.io/contract-license-types (optional, default 1=No License)') // eslint-disable-line max-len
   .option('-o, --optimize', 'Add This Flag to Optimize The Contract (optional)')
   .parse(process.argv);
 
@@ -61,6 +63,8 @@ program
       contractName    :   program.contractName,
       cvalues         :   program.constructParams,
       runs            :   program.runs,
+      evmVersion      :   program.evmVersion,
+      licenseType     :   program.licenseType,
       optimizationFlag:   program.optimize,
     };
     try{
