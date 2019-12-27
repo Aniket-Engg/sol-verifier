@@ -95,7 +95,7 @@ describe('sol-verifier', () => {
     });
   });
 
-  describe('Compiling & Verifying Sample.sol by enabling optimization & runs as 2000', () => {
+  describe('Compiling & Verifying Sample.sol with all explicit options', () => {
     let contractAddress;
     let contractName;
     let network;
@@ -122,6 +122,8 @@ describe('sol-verifier', () => {
         contractAddress:  contractAddress,
         network  : network,
         runs  : 2000,
+        evmVersion:  'byzantium',
+        licenseType: 3,
         optimizationFlag: true,  // Optimization Enabled
       };
       const response = await Verifier.verifyContract(sampleData);
