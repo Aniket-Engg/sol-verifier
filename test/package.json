@@ -12,7 +12,9 @@
   "author": "Aniket-Engg",
   "license": "ISC",
   "dependencies": {
-    "openzeppelin-solidity": "^2.1.3",
-    "solc": "^0.5.7"
+    "@truffle/hdwallet-provider": "^1.0.28",
+    "openzeppelin-solidity": "2.1.3",
+    "solc": "0.5.7",
+    "web3": "^1.2.4"
   }
 }

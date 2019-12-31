@@ -38,16 +38,13 @@
     "request": "^2.88.0",
     "request-promise": "^4.2.2",
     "sol-straightener": "^1.0.0",
-    "solidity-parser-antlr": "0.4.3",
-    "web3": "1.0.0-beta.37"
+    "solidity-parser-antlr": "0.4.3"
   },
   "devDependencies": {
     "chai": "^4.2.0",
     "coveralls": "^3.0.2",
     "eslint": "^5.15.3",
     "mocha": "^5.2.0",
-    "nyc": "^13.1.0",
-    "solc": "^0.5.12",
-    "truffle-hdwallet-provider": "^1.0.17"
+    "nyc": "^13.1.0"
   }
 }
