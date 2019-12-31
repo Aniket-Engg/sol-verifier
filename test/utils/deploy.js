@@ -1,7 +1,7 @@
 'use strict';
 
 const Web3 = require('web3');
-const HDWalletProvider = require('truffle-hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 const solc = require('./solc');
 
 const SEED = process.env.SEED;
