@@ -1,7 +1,8 @@
 [![npm version](https://badge.fury.io/js/sol-verifier.svg)](https://www.npmjs.com/package/sol-verifier)
 [![Build status](https://travis-ci.com/Aniket-Engg/sol-verifier.svg?branch=master)](https://travis-ci.com/Aniket-Engg/sol-verifier)
 [![Coverage Status](https://coveralls.io/repos/github/Aniket-Engg/sol-verifier/badge.svg?branch=master)](https://coveralls.io/github/Aniket-Engg/sol-verifier?branch=master)
-[![npm](https://img.shields.io/npm/dt/sol-verifier.svg)](https://www.npmjs.com/package/sol-verifier)
+[![npm](https://img.shields.io/npm/dw/sol-verifier.svg)](https://www.npmjs.com/package/sol-verifier)
+[![npm](https://img.shields.io/npm/dt/sol-verifier.svg?label=Total%20Downloads)](https://www.npmjs.com/package/sol-verifier)
 ![NPM](https://img.shields.io/npm/l/sol-verifier.svg)
 [![Package Quality](https://npm.packagequality.com/shield/sol-verifier.svg)](https://packagequality.com/#?package=sol-verifier)
 
@@ -32,12 +33,15 @@ Usage: sol-verifier [options]
 
 Options:
   -v, --version                                    output the version number
-  -k, --key <etherscan-api-key>                    Add Etherscan API Key (recommended but optional)
-  -c, --contract <path-to-solidity-contract-file>  Add Contract File Path (required)
-  -a, --address <contract-address>                 Add Address of Deployed Contract (required)
-  -n, --network <network>                          Add Ethereum Network on Which Contract is deployed (if applicable)
-  -N, --contractName <contract-name>               Add Contract Name if Passed File Contains More Than One Contract (if applicable)
-  -p, --constructParams [param1, param2,...]       Add Constructor Parameter Values Same as in Deployment (if applicable)
+  -k, --key <etherscan-api-key>                    Etherscan API Key (recommended but optional)
+  -c, --contract <path-to-solidity-contract-file>  Contract File Path (required)
+  -a, --address <contract-address>                 Address of Deployed Contract (required)
+  -n, --network <network>                          Ethereum Network on Which Contract is deployed (if applicable)
+  -N, --contractName <contract-name>               Contract Name if Passed File Contains More Than One Contract (if applicable)
+  -p, --constructParams [param1, param2,...]       Constructor Parameter Values Same as in Deployment (if applicable)
+  -r, --runs <runs>                                Optimizer Runs (optional, default 200)
+  -e, --evmVersion <evm-version>                   See valid options: https://solidity.readthedocs.io/en/latest/using-the-compiler.html#target-options (optional, default compiler-default)
+  -l, --licenseType <license-type>                 Valid codes 1-12, see https://etherscan.io/contract-license-types (optional, default 1=No License)
   -o, --optimize                                   Add This Flag to Optimize The Contract (optional)
   -h, --help                                       output usage information 
 ```
@@ -63,11 +67,11 @@ $ sol-verifier -c <contract-file-path> -a <contract-address>
 ```
 That's it.
 
-In an extensive one, where you have a contract importing some other contracts and having constructor with parameters,it can be verified with this command:
+When you have a contract importing some other contracts and having constructor with parameters, it can be verified with this command:
 ```
 $ sol-verifier -k <etherscan-api-key> -c <contract-file-path> -a <contract-address> -n <network i.e. mainnet, ropsten etc.> -p <constructor-params-values as: [param1,param2]> -N <contract-name>
 ```
-If contract is deployed by enabling optimization, flag `-o` can be used to enable the optimization during verification. On successful verification, you will get response as :
+If contract is compiled & deployed by enabling optimization, flag `-o` can be used to enable the optimization during verification. On successful verification, you will get response as :
 ```
 Info: Contract has been successfully verified.
 ```
@@ -83,7 +87,10 @@ A request object will be passed to verify contract. See below: (Make sure keys o
         network  : 'mainnet/ropsten/rinkeby/kovan',     // Ethereum network used (required)
         contractName: 'contractName'                    // Contract name, only if contract file has more than one contracts
         cvalues   : [constructor, values, in, array],   // constructor values in array, only if contract has constructor
-        optimizationFlag: false                         // Set `true` to enable optimization (Default: false)
+        evmVersion: 'istanbul',                         // See valid options: https://solidity.readthedocs.io/en/latest/using-the-compiler.html#target-options (optional, default compiler-default)
+        runs: 200,                                      // Optimizer Runs (optional, default 200)
+        licenseType: 1,                                 // Valid codes 1-12, see https://etherscan.io/contract-license-types (optional, default 1=No License)
+        optimizationFlag: false                         // Set `true` to enable optimization (default false)
     };
 
     await verifier.verifyContract(data);
